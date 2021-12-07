@@ -1,0 +1,100 @@
+2021/12/07 03:45:23 [error] 21005#21005: *26471 broken header: "GET / HTTP/1.1
+Host: localhost
+User-Agent: Go-http-client/1.1
+Accept-Encoding: gzip
+
+" while reading PROXY protocol, client: 127.0.0.1, server: 127.0.0.1:80
+2021/12/07 03:45:23 [error] 21009#21009: *26472 broken header: "GET / HTTP/1.1
+Host: 127.0.0.1
+User-Agent: Go-http-client/1.1
+Accept-Encoding: gzip
+
+" while reading PROXY protocol, client: 127.0.0.1, server: 127.0.0.1:80
+2021/12/07 03:45:23 [error] 21009#21009: *26473 broken header: "GET / HTTP/1.1
+Host: localhost
+User-Agent: Go-http-client/1.1
+Accept-Encoding: gzip
+
+" while reading PROXY protocol, client: 127.0.0.1, server: 127.0.0.1:80
+2021/12/07 03:45:23 [error] 21009#21009: *26474 broken header: "GET / HTTP/1.1
+Host: 127.0.0.1
+User-Agent: Go-http-client/1.1
+Accept-Encoding: gzip
+
+" while reading PROXY protocol, client: 127.0.0.1, server: 127.0.0.1:80
+2021/12/07 03:45:23 [error] 21009#21009: *26475 broken header: "GET / HTTP/1.1
+Host: 127.0.0.1
+User-Agent: Go-http-client/1.1
+Accept-Encoding: gzip
+
+" while reading PROXY protocol, client: 127.0.0.1, server: 127.0.0.1:80
+2021/12/07 03:45:23 [error] 21009#21009: *26476 broken header: "GET / HTTP/1.1
+Host: localhost
+User-Agent: Go-http-client/1.1
+Accept-Encoding: gzip
+
+" while reading PROXY protocol, client: 127.0.0.1, server: 127.0.0.1:80
+2021/12/07 03:45:23 [error] 21009#21009: *26477 broken header: "GET / HTTP/1.1
+Host: 127.0.0.1
+User-Agent: Go-http-client/1.1
+Accept-Encoding: gzip
+
+" while reading PROXY protocol, client: 127.0.0.1, server: 127.0.0.1:80
+2021/12/07 03:45:23 [error] 21009#21009: *26478 broken header: "GET / HTTP/1.1
+Host: 127.0.0.1
+User-Agent: Go-http-client/1.1
+Accept-Encoding: gzip
+
+" while reading PROXY protocol, client: 127.0.0.1, server: 127.0.0.1:80
+2021/12/07 03:45:23 [error] 21009#21009: *26479 broken header: "GET / HTTP/1.1
+Host: localhost
+User-Agent: Go-http-client/1.1
+Accept-Encoding: gzip
+
+" while reading PROXY protocol, client: 127.0.0.1, server: 127.0.0.1:80
+2021/12/07 03:45:23 [error] 21012#21012: *26480 broken header: "GET / HTTP/1.1
+Host: localhost
+User-Agent: Go-http-client/1.1
+Accept-Encoding: gzip
+
+" while reading PROXY protocol, client: 127.0.0.1, server: 127.0.0.1:80
+2021/12/07 03:45:23 [error] 21008#21008: *26481 broken header: "GET / HTTP/1.1
+Host: 127.0.0.1
+User-Agent: Go-http-client/1.1
+Accept-Encoding: gzip
+
+" while reading PROXY protocol, client: 127.0.0.1, server: 127.0.0.1:80
+2021/12/07 03:45:23 [error] 21012#21012: *26482 broken header: "GET / HTTP/1.1
+Host: 127.0.0.1
+User-Agent: Go-http-client/1.1
+Accept-Encoding: gzip
+
+" while reading PROXY protocol, client: 127.0.0.1, server: 127.0.0.1:80
+2021/12/07 03:45:24 [error] 21007#21007: *26483 broken header: "GET / HTTP/1.1
+Host: localhost
+User-Agent: Go-http-client/1.1
+Accept-Encoding: gzip
+
+" while reading PROXY protocol, client: 127.0.0.1, server: 127.0.0.1:80
+2021/12/07 03:45:24 [error] 21009#21009: *26484 broken header: "GET / HTTP/1.1
+Host: 127.0.0.1
+User-Agent: Go-http-client/1.1
+Accept-Encoding: gzip
+
+" while reading PROXY protocol, client: 127.0.0.1, server: 127.0.0.1:80
+2021/12/07 03:45:24 [error] 21010#21010: *26485 broken header: "GET / HTTP/1.1
+Host: localhost
+Accept-Encoding: identity
+connection: keep-alive
+
+" while reading PROXY protocol, client: 127.0.0.1, server: 127.0.0.1:80
+2021/12/07 03:45:24 [error] 21010#21010: *26486 broken header: "GET / HTTP/1.1
+Host: localhost
+Accept-Encoding: identity
+connection: keep-alive
+
+" while reading PROXY protocol, client: 127.0.0.1, server: 127.0.0.1:80
+2021/12/07 03:45:24 [error] 21010#21010: *26487 broken header: "GET / HTTP/1.1
+Host: 127.0.0.1
+Accept-Encoding: identity
+connection: keep-alive
