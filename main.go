@@ -154,7 +154,7 @@ func DoMatch() {
 	}
 
 	if found {
-		//matching block end
+		//matching in the last block
 		for _, v := range blocks {
 			fmt.Println(v)
 		}
