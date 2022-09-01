@@ -3,60 +3,87 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"io"
 	"log"
 	"os"
 	"regexp"
 
-	flags "github.com/jessevdk/go-flags"
+	"github.com/urfave/cli/v2"
 )
 
 var (
-	blockheading string
-	filename     string
-	matchstr     string
-	delim        bool
-	nohighlight  bool
-	ignorecase   bool
-	blocks       []string
+	blockheader string
+	filename    string
+	matchstr    string
+	delim       bool
+	nohighlight bool
+	ignorecase  bool
+	blocks      []string
 )
 
-var opts struct {
-	Blockheading string `short:"b" long:"blockheading" default:"^[0-9]{4} [0-9]{2}:" description:"block heading regexp"`
-	Delim        bool   `long:"delim" description:"delim"`
-	NoHighlight  bool   `long:"nohighlight" description:"No Highlight"`
-	IgnoreCase   bool   `short:"i" long:"ignorecase" description:"ignore case"`
-	Args         struct {
-		Matchstr string
-		Filename string
-	} `positional-args:"yes" required:"yes"`
-}
-
 func main() {
-	_, err := flags.Parse(&opts)
-	if err != nil {
-		return
+	app := &cli.App{
+		Name:                   "logrep",
+		Usage:                  "log grep",
+		UsageText:              "logrep [options] <matchstr> [filename]",
+		UseShortOptionHandling: true,
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:    "blockheader",
+				Aliases: []string{"b"},
+				Value:   "^[0-9]{4} [0-9]{2}:",
+				Usage:   "block header regexp",
+				// Required: true,
+			},
+			&cli.BoolFlag{
+				Name:  "delim",
+				Usage: "print line delim",
+			},
+			&cli.BoolFlag{
+				Name:  "nohighlight",
+				Usage: "No Highlight",
+			},
+			&cli.BoolFlag{
+				Name:    "ignorecase",
+				Aliases: []string{"i"},
+				Usage:   "ignore case",
+			},
+		},
+		Action: func(c *cli.Context) error {
+			matchstr = c.Args().Get(0)
+			filename = c.Args().Get(1)
+
+			if matchstr == "" {
+				cli.ShowAppHelp(c)
+				os.Exit(1)
+			}
+
+			blockheader = c.String("blockheader")
+			delim = c.Bool("delim")
+			nohighlight = c.Bool("nohighlight")
+			ignorecase = c.Bool("ignorecase")
+
+			fmt.Printf(`
+	match:        "%s"
+	file:         "%s"
+	blockheader:  "%s"
+	delim:        %v
+	nohighlight:  %v
+	ignorecase:   %v
+	
+`,
+				matchstr, filename, blockheader, delim, nohighlight, ignorecase)
+
+			DoMatch()
+
+			return nil
+		},
 	}
 
-	blockheading = opts.Blockheading
-	matchstr = opts.Args.Matchstr
-	filename = opts.Args.Filename
-	delim = opts.Delim
-	nohighlight = opts.NoHighlight
-	ignorecase = opts.IgnoreCase
+	err := app.Run(os.Args)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	fmt.Printf(`
-match:        "%s"
-file:         "%s"
-blockheading: "%s"
-delim:        %v
-nohighlight:  %v
-ignorecase:   %v
-
-`,
-		matchstr, filename, blockheading, delim, nohighlight, ignorecase)
-
-	DoMatch()
 }
 
 func DoMatch() {
@@ -65,47 +92,39 @@ func DoMatch() {
 	}
 	reg, err := regexp.Compile(matchstr)
 	if err != nil {
-		log.Panicf("matchstr regexp error: %v\n", err)
+		log.Fatalf("matchstr regexp compile error: %v\n", err)
 	}
 
-	regblock, err := regexp.Compile(blockheading)
+	regblock, err := regexp.Compile(blockheader)
 	if err != nil {
-		log.Panicf("blockheading regexp error: %v\n", err)
+		log.Fatalf("blockheader regexp compile error: %v\n", err)
 	}
 
-	f, err := os.Open(filename)
-	if err != nil {
-		log.Panicf(`open file "%s" error: %v`+"\n", filename, err)
-	}
-	defer f.Close()
+	var f *os.File
 
-	reader := bufio.NewReader(f)
+	if filename != "" {
+		f, err = os.Open(filename)
+		if err != nil {
+			log.Fatalf(`open file "%s" error: %v`+"\n", filename, err)
+		}
+		defer f.Close()
+	} else {
+		f = os.Stdin
+	}
+
 	found := false
 	totalnum := 0
 
-	for {
-		line, err := reader.ReadString('\n')
-		if err != nil {
-			if err != io.EOF {
-				log.Printf("ReadString err: %v\n", err)
-			}
+	scanner := bufio.NewScanner(f)
 
-			if found {
-				//matching block end
-				for _, v := range blocks {
-					fmt.Printf("%s", v)
-				}
-				totalnum++
-			}
-
-			break
-		}
+	for scanner.Scan() {
+		line := scanner.Text()
 
 		if regblock.FindStringIndex(line) != nil {
 			if found {
 				//matching block end
 				for _, v := range blocks {
-					fmt.Printf("%s", v)
+					fmt.Println(v)
 				}
 				totalnum++
 
@@ -116,24 +135,30 @@ func DoMatch() {
 				found = false
 			}
 
-			blocks = make([]string, 0)
+			blocks = nil
 			blocks = append(blocks, line)
 		} else {
-			if len(blocks) > 0 {
-				blocks = append(blocks, line)
-			}
+			blocks = append(blocks, line)
 		}
 
 		if reg.FindStringIndex(line) != nil {
 			// log.Println("found!")
 			found = true
 
-			if !nohighlight && len(blocks) > 0 {
+			if !nohighlight && blocks != nil {
 				blocks[len(blocks)-1] = reg.ReplaceAllStringFunc(line, func(src string) string {
 					return Yellow(src)
 				})
 			}
 		}
+	}
+
+	if found {
+		//matching block end
+		for _, v := range blocks {
+			fmt.Println(v)
+		}
+		totalnum++
 	}
 
 	fmt.Printf("\n==== total %d matches ====\n", totalnum)
